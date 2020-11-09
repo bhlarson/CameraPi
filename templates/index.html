@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Embedded Classification Demo</title>
+  </head>
+  <body>
+    <script>
+      function move_forward(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/forward', true);
+        xhr.send(null);
+      }
+      function updateSlider(slideAmount)
+      {
+        var sliderDiv = document.getElementById("slide").value;
+        sliderDiv.innerHTML = slideAmount;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/set ', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify({ "speed": slideAmount }));
+      }
+    </script>
+
+    <button name="forwardBtn" onclick="move_forward()">Forward</button>
+    <input id="slide" type="range" min="-255" max="255" step="1" value="0" onchange="updateSlider(this.value)">
+
+    <img src="{{ url_for('video_feed') }}" width=100%>
+  </body>
+</html>
