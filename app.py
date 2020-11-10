@@ -1,17 +1,23 @@
 #%%
 #!/usr/bin/env python
+#
+# sudo apt-get install libilmbase-dev
+# sudo apt-get install libopenexr-dev
+# sudo apt-get install libgstreamer1.0-dev
+# sudo apt-get install python3-picamera
+
 import os, sys, json, argparse, math
 import cv2
 import numpy as np
 from flask import Flask, request, render_template, Response, jsonify
-from camera_opencv import Camera
+from camera_pi import Camera
 import serial
 sys.path.insert(0, os.path.abspath(''))
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-debug', action='store_true',help='Debug server')
-parser.add_argument('-image_size', type=json.loads, default='[240, 432]', help='Training crop size [height, width]/  [90, 160],[120, 160],[120, 160], [144, 176],[288, 352], [240, 432],[480, 640],[576,1024],[720, 960], [720,1280],[1080, 1920]')
+parser.add_argument('-image_size', type=json.loads, default='[720,1280]', help='Training crop size [height, width]/  [90, 160],[120, 160],[120, 160], [144, 176],[288, 352], [240, 432],[480, 640],[576,1024],[720, 960], [720,1280],[1080, 1920]')
 parser.add_argument('-image_depth', type=int, default=3, help='Number of input colors.  1 for grayscale, 3 for RGB') 
 
 FLAGS, unparsed = parser.parse_known_args()
