@@ -4,24 +4,58 @@
   </head>
   <body>
     <script>
+      then = new Date().getTime();
       function move_forward(){
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/forward', true);
         xhr.send(null);
       }
-      function updateSlider(slideAmount)
+
+      function Stop()
       {
-        var sliderDiv = document.getElementById("slide").value;
-        sliderDiv.innerHTML = slideAmount;
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/set ', true);
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.send(JSON.stringify({ "speed": slideAmount }));
+        var now = new Date().getTime();
+
+        if(now-then > 50){        
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/set ', true);
+          xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+          xhr.send(JSON.stringify({ "speed": 0, "direction": 0 }));
+          document.getElementById("speed").value = 0;
+          document.getElementById("direction").value = 0;
+          then = now;
+        }
+      }
+
+      function SpeedSlider(slideAmount)
+      {
+        var now = new Date().getTime();
+
+        if(now-then > 100){        
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/set ', true);
+          xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+          xhr.send(JSON.stringify({ "speed": slideAmount }));
+          then = now;
+        }
+      }
+
+      function DirectonSlider(slideAmount)
+      {
+        var now = new Date().getTime();
+
+        if(now-then > 100){
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', '/set ', true);
+          xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+          xhr.send(JSON.stringify({ "direction": slideAmount }));
+          then = now;
+        }
       }
     </script>
 
-    <button name="forwardBtn" onclick="move_forward()">Forward</button>
-    <input id="slide" type="range" min="-255" max="255" step="1" value="0" onchange="updateSlider(this.value)">
+    <p><button name="stop" onclick="Stop()">Stop</button></p>
+    <p>Speed: <input id="speed" type="range" min="-255" max="255" step="1" value="0" oninput="SpeedSlider(this.value)"> </p>
+    <p>Direction: <input id="direction" type="range" min="-125" max="125" step="5" value="0" oninput="DirectonSlider(this.value)"></p>
 
     <img src="{{ url_for('video_feed') }}" width=100%>
   </body>
